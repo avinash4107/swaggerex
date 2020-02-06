@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetupgrade
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: upgrade
+  template:
+    metadata:
+      name: upgrade
+      labels:
+        app: upgrade
+    spec:
+      containers:
+      - name: dotnetnew
+        image: avinash4107/dotnetupgradeex:0.1
+        ports:
+        - containerPort: 80

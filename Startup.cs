@@ -29,6 +29,18 @@ namespace swaggerex
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+            services.AddScoped<AuthAttribute>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            var identitySettingsSection =
+            Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(identitySettingsSection);
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -46,7 +58,8 @@ namespace swaggerex
 			{
 			   c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 			});
-			
+
+	    app.UseAuthentication();	
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
